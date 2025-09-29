@@ -1,0 +1,263 @@
+    <!-- Card principal que contém todo o formulário de triagem -->
+    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-md border border-slate-200 max-w-4xl mx-auto">
+      
+      <!-- Cabeçalho da Seção -->
+      <div class="border-b border-slate-200 pb-4 mb-6">
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-800">Formulário de Triagem</h1>
+        <p class="text-slate-500 mt-1">Realizando triagem para o paciente: <span class="font-semibold text-blue-600">Ana Carolina Souza</span></p>
+      </div>
+
+      <!-- Formulário -->
+      <form class="space-y-8">
+        
+        <!-- Seção: Queixa Principal -->
+        <div>
+          <label for="queixa" class="block text-lg font-semibold text-slate-700 mb-2">Queixa Principal</label>
+          <textarea id="queixa" name="queixa" rows="4" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Descreva o principal sintoma ou motivo da visita do paciente..."></textarea>
+        </div>
+
+        <!-- Seção: Dados Antropométricos -->
+        <div>
+          <h2 class="block text-lg font-semibold text-slate-700 mb-4">Dados Antropométricos</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Peso -->
+            <div>
+              <label for="peso" class="block text-sm font-medium text-slate-600">Peso (kg)</label>
+              <input type="number" id="peso" name="peso" step="0.1" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: 70.5">
+            </div>
+            <!-- Altura -->
+            <div>
+              <label for="altura" class="block text-sm font-medium text-slate-600">Altura (cm)</label>
+              <input type="number" id="altura" name="altura" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: 170">
+            </div>
+            <!-- IMC (calculado automaticamente) -->
+            <div>
+              <label for="imc" class="block text-sm font-medium text-slate-600">IMC (calculado)</label>
+              <input type="text" id="imc" name="imc" readonly class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm bg-slate-100 text-slate-600" placeholder="Será calculado automaticamente">
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção: Sinais Vitais -->
+        <div>
+          <h2 class="block text-lg font-semibold text-slate-700 mb-4">Sinais Vitais</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <!-- Pressão Arterial -->
+            <div>
+              <label for="pa" class="block text-sm font-medium text-slate-600">Pressão Arterial</label>
+              <input type="text" id="pa" name="pa" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: 120/80">
+            </div>
+            <!-- Frequência Cardíaca -->
+            <div>
+              <label for="fc" class="block text-sm font-medium text-slate-600">Freq. Cardíaca (bpm)</label>
+              <input type="number" id="fc" name="fc" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: 75">
+            </div>
+            <!-- Frequência Respiratória -->
+            <div>
+              <label for="fr" class="block text-sm font-medium text-slate-600">Freq. Respiratória (rpm)</label>
+              <input type="number" id="fr" name="fr" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: 16">
+            </div>
+             <!-- Temperatura -->
+            <div>
+              <label for="temp" class="block text-sm font-medium text-slate-600">Temperatura (°C)</label>
+              <input type="text" id="temp" name="temp" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: 37.5">
+            </div>
+            <!-- Saturação O2 -->
+            <div>
+              <label for="spo2" class="block text-sm font-medium text-slate-600">Saturação O₂ (%)</label>
+              <input type="number" id="spo2" name="spo2" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: 98">
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção: Escala de Dor -->
+        <div>
+          <h2 class="block text-lg font-semibold text-slate-700 mb-4">Avaliação da Dor</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Nível de Dor -->
+            <div>
+              <label for="dor" class="block text-sm font-medium text-slate-600 mb-2">Nível de Dor (0-10)</label>
+              <div class="flex items-center space-x-2">
+                <span class="text-sm text-slate-500">0</span>
+                <input type="range" id="dor" name="dor" min="0" max="10" value="0" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                <span class="text-sm text-slate-500">10</span>
+                <span id="dor-value" class="ml-2 px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm font-medium">0</span>
+              </div>
+              <div class="flex justify-between text-xs text-slate-400 mt-1">
+                <span>Sem dor</span>
+                <span>Dor insuportável</span>
+              </div>
+            </div>
+            <!-- Localização da Dor -->
+            <div>
+              <label for="localizacao-dor" class="block text-sm font-medium text-slate-600">Localização da Dor</label>
+              <input type="text" id="localizacao-dor" name="localizacao-dor" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: Abdome, cabeça, tórax...">
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção: História Clínica -->
+        <div>
+          <h2 class="block text-lg font-semibold text-slate-700 mb-4">História Clínica</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Alergias -->
+            <div>
+              <label for="alergias" class="block text-sm font-medium text-slate-600">Alergias Conhecidas</label>
+              <textarea id="alergias" name="alergias" rows="3" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: Penicilina, Dipirona, NKDA (não há alergias conhecidas)..."></textarea>
+            </div>
+            <!-- Medicamentos em Uso -->
+            <div>
+              <label for="medicamentos" class="block text-sm font-medium text-slate-600">Medicamentos em Uso</label>
+              <textarea id="medicamentos" name="medicamentos" rows="3" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: Losartana 50mg, Metformina 850mg..."></textarea>
+            </div>
+          </div>
+          <!-- Comorbidades -->
+          <div class="mt-4">
+            <label class="block text-sm font-medium text-slate-600 mb-2">Comorbidades</label>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              <label class="flex items-center">
+                <input type="checkbox" name="comorbidades" value="diabetes" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Diabetes</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="comorbidades" value="hipertensao" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Hipertensão</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="comorbidades" value="cardiopatia" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Cardiopatia</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="comorbidades" value="asma" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Asma/DPOC</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="comorbidades" value="obesidade" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Obesidade</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="comorbidades" value="depressao" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Depressão</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="comorbidades" value="cancer" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Câncer</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="comorbidades" value="outros" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Outros</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção: Sintomas Complementares -->
+        <div>
+          <h2 class="block text-lg font-semibold text-slate-700 mb-4">Sintomas Complementares</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <!-- Tempo de Início -->
+            <div>
+              <label for="tempo-inicio" class="block text-sm font-medium text-slate-600">Tempo de Início dos Sintomas</label>
+              <select id="tempo-inicio" name="tempo-inicio" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Selecione...</option>
+                <option value="menos-1h">Menos de 1 hora</option>
+                <option value="1-6h">1 a 6 horas</option>
+                <option value="6-24h">6 a 24 horas</option>
+                <option value="1-7d">1 a 7 dias</option>
+                <option value="mais-7d">Mais de 7 dias</option>
+              </select>
+            </div>
+          </div>
+          <!-- Sintomas Associados -->
+          <div>
+            <label class="block text-sm font-medium text-slate-600 mb-2">Sintomas Associados</label>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              <label class="flex items-center">
+                <input type="checkbox" name="sintomas" value="nausea" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Náusea</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="sintomas" value="vomito" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Vômito</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="sintomas" value="tontura" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Tontura</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="sintomas" value="cefaleia" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Cefaleia</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="sintomas" value="dispneia" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Dispneia</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="sintomas" value="dor-toracica" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Dor Torácica</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="sintomas" value="febre" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Febre</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="sintomas" value="sudorese" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                <span class="ml-2 text-sm text-slate-700">Sudorese</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção: Classificação de Risco -->
+        <div>
+            <h2 class="block text-lg font-semibold text-slate-700 mb-4">Classificação de Risco (Protocolo de Manchester)</h2>
+            <div class="flex flex-wrap gap-3">
+              <button
+                *ngFor="let risco of classificacoes"
+                (click)="selecionarRisco(risco.id)"
+                type="button"
+                class="flex-1 min-w-[120px] text-white font-bold py-3 px-4 rounded-lg transition-transform hover:scale-105"
+                [ngClass]="risco.cor"
+                [class.ring-4]="riscoSelecionado() === risco.id"
+                [class.ring-offset-2]="riscoSelecionado() === risco.id"
+                [class.ring-blue-500]="riscoSelecionado() === risco.id">
+                {{ risco.nome }}
+              </button>
+            </div>
+        </div>
+
+        <!-- Seção: Informações do Atendimento -->
+        <div>
+          <h2 class="block text-lg font-semibold text-slate-700 mb-4">Informações do Atendimento</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Enfermeiro Responsável -->
+            <div>
+              <label for="enfermeiro" class="block text-sm font-medium text-slate-600">Enfermeiro Responsável</label>
+              <input type="text" id="enfermeiro" name="enfermeiro" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Nome do enfermeiro">
+            </div>
+            <!-- Data/Hora -->
+            <div>
+              <label for="data-triagem" class="block text-sm font-medium text-slate-600">Data/Hora da Triagem</label>
+              <input type="datetime-local" id="data-triagem" name="data-triagem" class="mt-1 w-full p-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção: Observações -->
+        <div>
+          <label for="observacoes" class="block text-lg font-semibold text-slate-700 mb-2">Observações Gerais</label>
+          <textarea id="observacoes" name="observacoes" rows="4" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Observações adicionais, condições especiais, orientações específicas..."></textarea>
+        </div>
+        
+        <!-- Ações do Formulário -->
+        <div class="flex justify-end items-center gap-4 pt-4 border-t border-slate-200 mt-8">
+            <button type="button" class="px-6 py-2.5 text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 font-semibold transition">
+              Cancelar
+            </button>
+            <button type="submit" class="px-6 py-2.5 text-white bg-blue-600 rounded-lg hover:bg-blue-700 font-semibold transition">
+              Salvar Triagem
+            </button>
+        </div>
+
+      </form>
+    </div>

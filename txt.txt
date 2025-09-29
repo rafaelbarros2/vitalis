@@ -1,0 +1,265 @@
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+// --- Interface para definir a estrutura de dados de um paciente
+interface Paciente {
+  id: number;
+  nome: string;
+  horaChegada: string;
+  status: 'Aguardando Triagem' | 'Aguardando Atendimento' | 'Em Atendimento';
+  // A classificação é opcional, pois o paciente só a recebe após a triagem.
+  classificacao?: 'emergencia' | 'muito_urgente' | 'urgente' | 'pouco_urgente' | 'nao_urgente';
+  queixaPrincipal: string;
+}
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <div class="antialiased bg-slate-100">
+      <!-- Topbar -->
+      <header class="bg-white border-b border-slate-200 fixed top-0 left-0 w-full z-20">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center justify-start">
+              <button (click)="toggleSidebar()" type="button" class="inline-flex items-center p-2 text-sm text-slate-500 rounded-lg lg:hidden hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200">
+                <span class="sr-only">Open sidebar</span>
+                <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                   <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+                </svg>
+              </button>
+              <a href="#" class="flex ml-2 md:mr-24">
+                <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-blue-600">Vitalis</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Sidebar -->
+      <aside 
+        class="fixed top-0 left-0 z-10 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-slate-200 lg:translate-x-0"
+        [class.translate-x-0]="sidebarOpen()"
+        aria-label="Sidebar">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-white">
+           <ul class="space-y-2 font-medium">
+              <li>
+                 <a href="#" class="flex items-center p-2 text-blue-700 bg-blue-100 rounded-lg group">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h6v6H4V4zm8 0h6v6h-6V4zM4 14h6v6H4v-6zm8 10h6v-6h-6v6zM14 4h6v6h-6V4z"/></svg>
+                    <span class="ml-3">Painel</span>
+                 </a>
+              </li>
+              <li>
+                 <a href="#" class="flex items-center p-2 text-slate-900 rounded-lg hover:bg-slate-100 group">
+                    <svg class="w-5 h-5 text-slate-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4a4 4 0 100 8 4 4 0 000-8zm0 10c-3.31 0-6 1.34-6 3v1h12v-1c0-1.66-2.69-3-6-3zm6-10a2 2 0 012 2v2h-2V6h-2V4h2zM8 4a2 2 0 012-2h4a2 2 0 012 2v2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2v2a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2H6a2 2 0 01-2-2V8a2 2 0 012-2h2V4z"/></svg>
+                    <span class="flex-1 ml-3 whitespace-nowrap">Cadastro de Paciente</span>
+                 </a>
+              </li>
+              <li>
+                 <a href="#" class="flex items-center p-2 text-slate-900 rounded-lg hover:bg-slate-100 group">
+                    <svg class="w-5 h-5 text-slate-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9v-2h2v2zm0-4H9V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    <span class="flex-1 ml-3 whitespace-nowrap">Triagem</span>
+                 </a>
+              </li>
+              <li>
+                 <a href="#" class="flex items-center p-2 text-slate-900 rounded-lg hover:bg-slate-100 group">
+                    <svg class="w-5 h-5 text-slate-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/></svg>
+                    <span class="flex-1 ml-3 whitespace-nowrap">Atendimento Médico</span>
+                 </a>
+              </li>
+           </ul>
+        </div>
+      </aside>
+      
+      <!-- Overlay para fechar sidebar em mobile -->
+      <div 
+        *ngIf="sidebarOpen()" 
+        (click)="toggleSidebar()" 
+        class="fixed inset-0 bg-black opacity-50 z-0 lg:hidden">
+      </div>
+
+      <!-- Container Principal com o conteúdo (nosso painel) -->
+      <main class="p-4 lg:ml-64 h-auto pt-20">
+        <div class="max-w-full mx-auto">
+          <!-- Board Kanban com as colunas de status -->
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+            <!-- Coluna: Aguardando Triagem -->
+            <div class="bg-white rounded-xl p-4 flex flex-col h-full border border-slate-200">
+              <div class="flex items-center mb-4">
+                <h2 class="text-xl font-semibold text-slate-700">Aguardando Triagem</h2>
+                <span class="ml-2 bg-blue-100 text-blue-800 text-sm font-bold px-2.5 py-0.5 rounded-full">
+                  {{ aguardandoTriagem().length }}
+                </span>
+              </div>
+              <div class="space-y-4 overflow-y-auto">
+                @for (paciente of aguardandoTriagem(); track paciente.id) {
+                  <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md">
+                    <p class="font-bold text-lg text-slate-800">{{ paciente.nome }}</p>
+                    <p class="text-sm text-slate-500 mt-1">{{ paciente.queixaPrincipal }}</p>
+                    <div class="flex items-center justify-between mt-3 text-xs text-slate-400">
+                      <span class="flex items-center">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Chegada: {{ paciente.horaChegada }}
+                      </span>
+                    </div>
+                  </div>
+                } @empty {
+                  <div class="text-center py-8">
+                    <p class="text-slate-400">Nenhum paciente na triagem.</p>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Coluna: Aguardando Atendimento Médico -->
+            <div class="bg-white rounded-xl p-4 flex flex-col h-full border border-slate-200">
+              <div class="flex items-center mb-4">
+                <h2 class="text-xl font-semibold text-slate-700">Aguardando Atendimento</h2>
+                <span class="ml-2 bg-blue-100 text-blue-800 text-sm font-bold px-2.5 py-0.5 rounded-full">
+                  {{ aguardandoAtendimento().length }}
+                </span>
+              </div>
+              <div class="space-y-4 overflow-y-auto">
+                @for (paciente of aguardandoAtendimento(); track paciente.id) {
+                  <div
+                    class="bg-slate-50 rounded-lg p-4 shadow-sm border-l-4"
+                    [ngClass]="getCorClassificacao(paciente.classificacao).border"
+                  >
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <p class="font-bold text-lg text-slate-800">{{ paciente.nome }}</p>
+                        <p class="text-sm text-slate-500 mt-1">{{ paciente.queixaPrincipal }}</p>
+                      </div>
+                      <span
+                        class="text-xs font-bold px-3 py-1 rounded-full"
+                        [ngClass]="getCorClassificacao(paciente.classificacao).badge"
+                      >
+                        {{ getNomeClassificacao(paciente.classificacao) }}
+                      </span>
+                    </div>
+                    <div class="flex items-center justify-between mt-3 text-xs text-slate-400">
+                       <span class="flex items-center">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Chegada: {{ paciente.horaChegada }}
+                      </span>
+                    </div>
+                  </div>
+                } @empty {
+                   <div class="text-center py-8">
+                    <p class="text-slate-400">Nenhum paciente aguardando consulta.</p>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Coluna: Em Atendimento -->
+            <div class="bg-white rounded-xl p-4 flex flex-col h-full border border-slate-200">
+              <div class="flex items-center mb-4">
+                <h2 class="text-xl font-semibold text-slate-700">Em Atendimento</h2>
+                <span class="ml-2 bg-blue-100 text-blue-800 text-sm font-bold px-2.5 py-0.5 rounded-full">
+                  {{ emAtendimento().length }}
+                </span>
+              </div>
+              <div class="space-y-4 overflow-y-auto">
+                @for (paciente of emAtendimento(); track paciente.id) {
+                   <div
+                    class="bg-slate-50 rounded-lg p-4 shadow-sm border-l-4 animate-pulse"
+                    [ngClass]="getCorClassificacao(paciente.classificacao).border"
+                  >
+                    <p class="font-bold text-lg text-slate-800">{{ paciente.nome }}</p>
+                     <p class="text-sm text-slate-500 mt-1">com Dr(a). Silva</p>
+                  </div>
+                } @empty {
+                   <div class="text-center py-8">
+                    <p class="text-slate-400">Nenhum paciente em consulta.</p>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  `,
+})
+export class App {
+  // --- Estado para controlar a visibilidade da Sidebar ---
+  sidebarOpen = signal(false);
+
+  toggleSidebar() {
+    this.sidebarOpen.set(!this.sidebarOpen());
+  }
+  
+  // --- Dados de Exemplo (Mock) ---
+  // Em uma aplicação real, estes dados viriam de uma API.
+  private pacientesData: Paciente[] = [
+    { id: 1, nome: 'Ana Carolina Souza', horaChegada: '08:15', status: 'Aguardando Triagem', queixaPrincipal: 'Dor de cabeça e febre.' },
+    { id: 2, nome: 'Bruno Alves', horaChegada: '08:22', status: 'Aguardando Atendimento', classificacao: 'urgente', queixaPrincipal: 'Corte profundo no dedo.' },
+    { id: 3, nome: 'Carlos Eduardo Lima', horaChegada: '08:30', status: 'Em Atendimento', classificacao: 'muito_urgente', queixaPrincipal: 'Dificuldade para respirar.' },
+    { id: 4, nome: 'Daniela Ferreira', horaChegada: '08:40', status: 'Aguardando Atendimento', classificacao: 'pouco_urgente', queixaPrincipal: 'Tosse seca há 3 dias.' },
+    { id: 5, nome: 'Eduardo Martins', horaChegada: '08:55', status: 'Aguardando Triagem', queixaPrincipal: 'Dor de garganta.' },
+    { id: 6, nome: 'Fernanda Costa', horaChegada: '09:05', status: 'Aguardando Atendimento', classificacao: 'nao_urgente', queixaPrincipal: 'Renovação de receita.' },
+    { id: 7, nome: 'Gustavo Pereira', horaChegada: '07:50', status: 'Aguardando Atendimento', classificacao: 'emergencia', queixaPrincipal: 'Dor no peito intensa.' },
+  ];
+
+  // --- State Management com Signals ---
+  pacientes = signal<Paciente[]>(this.pacientesData);
+
+  // --- Computed Signals para filtrar as listas de cada coluna ---
+  aguardandoTriagem = computed(() =>
+    this.pacientes().filter(p => p.status === 'Aguardando Triagem')
+  );
+
+  emAtendimento = computed(() =>
+    this.pacientes().filter(p => p.status === 'Em Atendimento')
+  );
+
+  // A fila de atendimento médico é ordenada pela classificação de risco.
+  aguardandoAtendimento = computed(() =>
+    this.pacientes()
+      .filter(p => p.status === 'Aguardando Atendimento')
+      .sort((a, b) => this.getOrdemClassificacao(a.classificacao) - this.getOrdemClassificacao(b.classificacao))
+  );
+
+  // --- Funções Auxiliares para Classificação ---
+
+  // Mapeia a classificação para uma ordem numérica para ordenação
+  private getOrdemClassificacao(classificacao?: string): number {
+    switch (classificacao) {
+      case 'emergencia': return 1;
+      case 'muito_urgente': return 2;
+      case 'urgente': return 3;
+      case 'pouco_urgente': return 4;
+      case 'nao_urgente': return 5;
+      default: return 99;
+    }
+  }
+
+  // Retorna as classes de cor do TailwindCSS para cada tipo de classificação
+  getCorClassificacao(classificacao?: string): { border: string, badge: string } {
+    switch (classificacao) {
+      case 'emergencia': return { border: 'border-red-500', badge: 'bg-red-100 text-red-800' };
+      case 'muito_urgente': return { border: 'border-orange-500', badge: 'bg-orange-100 text-orange-800' };
+      case 'urgente': return { border: 'border-yellow-500', badge: 'bg-yellow-100 text-yellow-800' };
+      case 'pouco_urgente': return { border: 'border-green-500', badge: 'bg-green-100 text-green-800' };
+      case 'nao_urgente': return { border: 'border-blue-500', badge: 'bg-blue-100 text-blue-800' };
+      default: return { border: 'border-slate-300', badge: 'bg-slate-200 text-slate-600' };
+    }
+  }
+
+  // Retorna o nome formatado para exibição na tela
+  getNomeClassificacao(classificacao?: string): string {
+     switch (classificacao) {
+      case 'emergencia': return 'Emergência';
+      case 'muito_urgente': return 'Muito Urgente';
+      case 'urgente': return 'Urgente';
+      case 'pouco_urgente': return 'Pouco Urgente';
+      case 'nao_urgente': return 'Não Urgente';
+      default: return 'Não Classificado';
+    }
+  }
+}
+
