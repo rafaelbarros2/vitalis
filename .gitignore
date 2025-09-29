@@ -43,4 +43,5 @@ Thumbs.db
 
 # Claude Code configuration
 .claude/
+CLAUDE.md
 claude_desktop_config.json

@@ -1,10 +1,10 @@
-<div class="bg-slate-100 min-h-screen p-4 sm:p-8" style="color: #1f2937;">
+<div class="bg-slate-100 min-h-screen p-4 sm:p-8">
       <div class="max-w-6xl mx-auto">
         
         <!-- Cabeçalho da Página -->
         <div class="mb-6">
-          <h1 class="text-3xl font-bold" style="color: #0f172a;">Posto de Enfermagem</h1>
-          <p class="mt-1" style="color: #374151;">Pacientes aguardando procedimentos e em observação.</p>
+          <h1 class="text-3xl font-bold">Posto de Enfermagem</h1>
+          <p class="mt-1">Pacientes aguardando procedimentos e em observação.</p>
         </div>
 
         <!-- Lista de Pacientes -->
@@ -16,7 +16,7 @@
               <!-- Informações do Paciente -->
               <div class="md:col-span-1 border-b md:border-b-0 md:border-r pb-4 md:pb-0 md:pr-4 border-slate-200">
                 <h2 class="text-xl font-bold text-blue-600">{{ paciente.nome }}</h2>
-                <p style="color: #374151;">Leito: {{ paciente.leito }}</p>
+                <p>Leito: {{ paciente.leito }}</p>
                 <span class="mt-2 inline-block px-3 py-1 text-sm font-semibold rounded-full"
                   [ngClass]="paciente.status === 'Em Observação' ? 'bg-orange-100 text-orange-700' : 'bg-purple-100 text-purple-700'">
                   {{ paciente.status }}
@@ -25,7 +25,7 @@
 
               <!-- Prescrição e Tarefas -->
               <div class="md:col-span-2">
-                <h3 class="font-semibold mb-2" style="color: #374151;">Plano de Cuidados</h3>
+                <h3 class="font-semibold mb-2">Plano de Cuidados</h3>
                 <div class="space-y-3">
                   <!-- Lista de Medicamentos -->
                   <div *ngFor="let med of paciente.prescricao.meds; let i = index">
@@ -34,7 +34,7 @@
                              [checked]="med.administrada" 
                              (change)="toggleMedicacao(paciente.id, i)"
                              class="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                      <span class="ml-3" [ngClass]="{'line-through': med.administrada}" style="color: #1f2937;">
+                      <span class="ml-3" [ngClass]="{'line-through': med.administrada}">
                         {{ med.nome }} - <span class="text-sm font-mono">{{ med.dosagem }}</span>
                       </span>
                     </label>

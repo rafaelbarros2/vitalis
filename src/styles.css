@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+/* Global text color override */
+body {
+  color: #1f2937 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #0f172a !important;
+}
+
+label {
+  color: #374151 !important;
+}

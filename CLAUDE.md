@@ -19,6 +19,7 @@ Vitalis is an Angular 19 healthcare application that uses:
 ### Building
 - `npm run build` or `ng build` - Build for production (outputs to `dist/vitalis/`)
 - `ng build --configuration development` - Build for development
+- `npm run build -- --configuration production --base-href /vitalis/ --output-hashing=all` - Build for GitHub Pages deployment
 
 ### Testing
 - `npm test` or `ng test` - Run unit tests with Karma
@@ -97,6 +98,7 @@ This is a comprehensive healthcare management system with the following main fea
 - Production builds have bundle size limits (500kB warning, 1MB error)
 - Component styles limited to 4kB warning, 8kB error
 - Development builds include source maps and disable optimization
+- GitHub Pages deployment configured via `.github/workflows/static.yml` with automatic builds on main branch pushes
 
 ## Healthcare Domain Context
 
